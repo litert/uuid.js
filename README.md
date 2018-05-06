@@ -30,9 +30,9 @@ variety [Snowflake-SI-vA](./docs/en-US/Snowflake-SI-vA.md) are supported.
 > JavaScript, with capacity 128 uuids per milliseconds, and 64 machine parallel
 > working.
 
-## 示例
+## Samples
 
-### Snowflake-SI 基本使用
+### Snowflake-SI Usage
 
 ```ts
 import * as libuuid from "@litert/uuid";
@@ -63,7 +63,7 @@ console.log(makeUUID.MACHINE_ID); // See the machine ID.
 console.log(new Date(makeUUID.BASE_CLOCK)); // See the base-clock
 ```
 
-### Snowflake-SI 算法微调
+### Snowflake-SI Adjustment
 
 ```ts
 import * as libuuid from "@litert/uuid";
@@ -98,7 +98,7 @@ console.log(makeUUID.MACHINE_ID); // See the machine ID.
 console.log(new Date(makeUUID.BASE_CLOCK)); // See the base-clock
 ```
 
-### Snowflake-SI-vA 基本使用
+### Snowflake-SI-vA Usage
 
 ```ts
 import * as libuuid from "@litert/uuid";
