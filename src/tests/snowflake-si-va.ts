@@ -27,6 +27,7 @@ const nextUUID = libuuid.SnowflakeSIvA.createGenerateor({
     "cursor": libuuid.SnowflakeSIvA.calculateCursor(1562244321456127)
 });
 
+console.log(libuuid.SnowflakeSIvA.getUUIDRangeByMID(10));
 console.log(nextUUID());
 console.log(nextUUID());
 console.log(nextUUID.MACHINE_ID);

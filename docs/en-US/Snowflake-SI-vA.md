@@ -9,12 +9,12 @@ brought into being.
 The Snowflake-SI-vA algorithm uses 53-bits integer as the output of UUID
 generation, its bits-mapping shows like following:
 
-| H |                    52 ~ 10                  |    9 ~ 0   | L |
-|:-:|:-------------------------------------------:|:----------:|:-:|
-|   | 1111111111111111111111111111111111111111111 | 1111111111 |   |
-|   |                      UIN                    |    MID     |   |
+| H |   52 ~ 43  |                     42 ~ 0                  | L |
+|:-:|:----------:|:-------------------------------------------:|:-:|
+|   | 1111111111 | 1111111111111111111111111111111111111111111 |   |
+|   |    MID     |                      UIN                    |   |
 
-As above graph shows, the high 43 bits are the UIN(UUID Index Number). It's the
+As above graph shows, the low 43 bits are the UIN(UUID Index Number). It's the
 sum of the cursor of an incremental sequence and the current Unix timestamp in
 milliseconds. It means the genrated UUID is still an incremental sequence.
 
@@ -23,7 +23,7 @@ milliseconds. It means the genrated UUID is still an incremental sequence.
 > incremental sequence and timestamp, there is 2-bits as the extra reserved
 > zone.
 
-The low 10-bits is the ID of machine, for distributed services. So that it
+The high 10-bits is the ID of machine, for distributed services. So that it
 will not generate duplicated UUID between multi-instances. Different to the
 Snowflake-SI, Snowflake-SI-vA use a fixed 10-bits for MID, and then there could
 always be 1024 instances at most.

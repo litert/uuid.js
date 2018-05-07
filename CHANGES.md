@@ -1,13 +1,5 @@
 # Changes Logs
 
-## v0.2.2
+## v0.1.1
 
-- Fixed: Error when creating text logger lacking `$trace` definition.
-
-## v0.2.1
-
-- Fixed: Only one level was operated in global operation.
-
-## v0.2.0
-
-- A full new simpler logger.
+- Fixed the position of MID of UUID in Snowflake-SI-vA.

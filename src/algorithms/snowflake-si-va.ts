@@ -27,6 +27,11 @@ export namespace SnowflakeSIvA {
      */
     const MID_LENGTH = 10;
 
+    /**
+     * UUID Index Number
+     */
+    const UIN_LENGTH = 43;
+
     export function calculateCursor(lastUUID: number): number {
 
         const result = Math.floor(
@@ -39,6 +44,30 @@ export namespace SnowflakeSIvA {
         }
 
         return 0;
+    }
+
+    export interface UUIDRange {
+
+        max: number;
+
+        min: number;
+    }
+
+    export function getUUIDRangeByMID(mid: number): UUIDRange {
+
+        const MAX_MID = Math.pow(2, MID_LENGTH);
+
+        if (mid >= MAX_MID || mid < 0) {
+
+            throw new RangeError(`mid must be between 0 and ${MAX_MID - 1}.`);
+        }
+
+        const BASE = Math.pow(2, UIN_LENGTH);
+
+        return {
+            max: mid * BASE + BASE - 1,
+            min: mid * BASE
+        };
     }
 
     export function createGenerateor(opts: {
@@ -68,13 +97,11 @@ export namespace SnowflakeSIvA {
 
         let ret: any;
 
-        const MID_FIELD = opts.mid;
-
-        const UIN_BASE = Math.pow(2, MID_LENGTH);
+        const MID_FIELD = opts.mid * Math.pow(2, UIN_LENGTH);
 
         ret = function(): number {
 
-            return MID_FIELD + (Date.now() + cursor++) * UIN_BASE;
+            return MID_FIELD + Date.now() + cursor++;
         };
 
         Object.defineProperty(ret, "MACHINE_ID", {
