@@ -23,11 +23,20 @@ npm i @litert/uuid --save
 
 ## 生成算法
 
-目前只支持 [Snowflake-SI](./docs/zh-CN/Snowflake-SI.md) 算法及其一种变种
-[Snowflake-SI-vA](./docs/zh-CN/Snowflake-SI-vA.md) 。
+目前支持以下生成算法。
 
-> Snowflake-SI 是 Snowflake Safe Integer 的简写，即是 Snowflake 算法的简版，但是能
-> 保证生成的是 ECMAScript 规范中的安全整数（0 ~ 2 ^ 53 - 1）
+### [Snowflake](https://blog.twitter.com/engineering/en_us/a/2010/announcing-snowflake.html)
+
+一种推特发明的 64 位整数 UUID 生成算法。
+
+### [Snowflake-SI](./docs/zh-CN/Snowflake-SI.md)
+
+Snowflake-SI 是 Snowflake Safe Integer 的简写，即是 Snowflake 算法的简版，但是能
+保证生成的是 ECMAScript 规范中的安全整数（0 ~ 2 ^ 53 - 1）
+
+### [Snowflake-SI-vA](./docs/zh-CN/Snowflake-SI-vA.md)
+
+Snowflake-SI-vA 是 Snowflake-SI 算法的一个变种。
 
 ## 示例
 

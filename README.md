@@ -23,12 +23,21 @@ npm i @litert/uuid --save
 
 ## Algorithms
 
-Now only [Snowflake-SI](./docs/en-US/Snowflake-SI.md) algorithm and one of its
-variety [Snowflake-SI-vA](./docs/en-US/Snowflake-SI-vA.md) are supported.
+Following algorithms are supported:
 
-> The Snowflake-SI algorithm generates safe integer (52-bits integer) for
-> JavaScript, with capacity 128 uuids per milliseconds, and 64 machine parallel
-> working.
+### [Snowflake](https://blog.twitter.com/engineering/en_us/a/2010/announcing-snowflake.html)
+
+A 64-bit integer UUID algorithm provided by Twitter.
+
+### [Snowflake-SI](./docs/en-US/Snowflake-SI.md)
+
+The Snowflake-SI algorithm generates safe integer (52-bits integer) for
+JavaScript, with capacity 128 uuids per milliseconds, and 64 machine parallel
+working.
+
+### [Snowflake-SI-vA](./docs/en-US/Snowflake-SI-vA.md)
+
+A variant of Snowflake-SI algorithm.
 
 ## Samples
 

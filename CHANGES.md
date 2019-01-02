@@ -1,5 +1,10 @@
 # Changes Logs
 
+## v1.0.0
+
+- Refactored the project.
+- Added implements of standard Snowflake algorithm.
+
 ## v0.1.2
 
 - Remove useless dependencies.
