@@ -14,8 +14,11 @@
  *  limitations under the License.
  */
 
-export * from "./Errors";
-export * from "./SnowflakeBI";
-export * from "./SnowflakeSIvA";
-export * from "./SnowflakeSI";
-export * from "./GUID";
+// tslint:disable:no-console
+import * as UUID from "../libs";
+
+const factory = UUID.GUID.createFactory();
+
+const generator = factory.createV1({ "mac": "11-22-33-44-55-66" });
+
+console.log(generator());

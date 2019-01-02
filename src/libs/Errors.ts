@@ -83,3 +83,9 @@ export const E_INVALID_BASE_CLOCK = Errors.define(
     "E_INVALID_BASE_CLOCK",
     "The base of clock is invalid, must be after 2003-03-18T07:20:19.224Z."
 );
+
+export const E_INVALID_MAC_ADDR = Errors.define(
+    null,
+    "E_INVALID_MAC_ADDR",
+    "The input of MAC address is invalid."
+);

@@ -69,6 +69,17 @@
                 "${workspaceFolder}/libs/*.js",
                 "${workspaceFolder}/samples/*.js"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Verify GUID-v1 Output",
+            "program": "${workspaceFolder}/src/samples/GUID-v1-Verification.ts",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/libs/*.js",
+                "${workspaceFolder}/samples/*.js"
+            ]
         }
     ]
 }
