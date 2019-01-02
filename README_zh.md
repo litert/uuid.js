@@ -111,7 +111,9 @@ console.log(new Date(makeUUID.baseClock));  // 查看 UUID 生成器的业务基
 ```ts
 import * as libuuid from "@litert/uuid";
 
-const makeUUID = libuuid.SnowflakeSIvA.createGenerateor({
+const factory = UUID.SnowflakeBIvA.createFactory();
+
+const makeUUID = factory.create({
 
     /**
      * 机器序号，取值范围：0 ~ 1023。
@@ -121,12 +123,12 @@ const makeUUID = libuuid.SnowflakeSIvA.createGenerateor({
     /**
      * 根据上一次生成的 UUID 重新计算内部递增序列指针。
      */
-    "cursor": libuuid.SnowflakeSIvA.calculateCursor(1562244321456127)
+    "cursor": factory.calculateCursor(1562244321456127)
 });
 
 console.log(nextUUID());
 console.log(nextUUID());
-console.log(nextUUID.MACHINE_ID);
+console.log(nextUUID.machineId);
 console.log(Number.isSafeInteger(nextUUID()));
 
 ```

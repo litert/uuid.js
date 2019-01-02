@@ -115,23 +115,25 @@ console.log(new Date(makeUUID.baseClock));  // See the base-clock
 ```ts
 import * as libuuid from "@litert/uuid";
 
-const makeUUID = libuuid.SnowflakeSIvA.createGenerateor({
+const factory = UUID.SnowflakeBIvA.createFactory();
+
+const makeUUID = factory.create({
 
     /**
      * The ID of machine, 0 ~ 1023
      */
-    "mid": 333,
+    "machineId": 333,
 
     /**
      * Calculate the cursor of the incremental sequence insides generator by
      * the last generated UUID.
      */
-    "cursor": libuuid.SnowflakeSIvA.calculateCursor(1562244321456127)
+    "cursor": factory.calculateCursor(1562244321456127)
 });
 
 console.log(nextUUID());
 console.log(nextUUID());
-console.log(nextUUID.MACHINE_ID);
+console.log(nextUUID.machineId);
 console.log(Number.isSafeInteger(nextUUID()));
 
 ```
