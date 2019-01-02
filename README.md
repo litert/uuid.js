@@ -46,30 +46,31 @@ A variant of Snowflake-SI algorithm.
 ```ts
 import * as libuuid from "@litert/uuid";
 
-const makeUUID = libuuid.SnowflakeSI.createGenerateor({
+const factory = UUID.SnowflakeBI.createFactory();
+
+const makeUUID = factory.create({
 
     /**
      * The machine ID.
      *
-     * By default the uinWidth is 8, and the rest 5 bits is left to MID, so
+     * By default the uinBitWidth is 8, and the rest 5 bits is left to MID, so
      * that the mid must be between 0 and 31.
      */
-    "mid": 1,
+    "machineId": 1,
 
     /**
      * The base-clock of generator. Is unchangeable once setup.
      *
-     * And it cannot be earlier than 2003-03-18T07:20:20Z
+     * And it cannot be earlier than 2003-03-18T07:20:19.225Z.
      */
     "baseClock": new Date(2004, 0, 1, 0, 0, 0, 0).getTime(),
-
 });
 
-console.log(makeUUID()); // Generate a UUIN
-console.log(makeUUID()); // Generate a UUIN
-console.log(makeUUID.MS_CAPACITY); // See the capacity of UUIDs in 1ms
-console.log(makeUUID.MACHINE_ID); // See the machine ID.
-console.log(new Date(makeUUID.BASE_CLOCK)); // See the base-clock
+console.log(makeUUID());                    // Generate a UUID
+console.log(makeUUID());                    // Generate a UUID
+console.log(makeUUID.uinCapacity);          // See the capacity of UUIDs in 1ms
+console.log(makeUUID.machineId);            // See the machine ID.
+console.log(new Date(makeUUID.baseClock));  // See the base-clock
 ```
 
 ### Snowflake-SI Adjustment
@@ -77,12 +78,14 @@ console.log(new Date(makeUUID.BASE_CLOCK)); // See the base-clock
 ```ts
 import * as libuuid from "@litert/uuid";
 
-const makeUUID = libuuid.SnowflakeSI.createGenerateor({
+const factory = UUID.SnowflakeBI.createFactory();
+
+const makeUUID = factory.create({
 
     /**
      * The machine ID.
      *
-     * Now the uinWidth has been set to 12, and only 1 bit is left to MID, so
+     * Now the uinBitWidth has been set to 12, and only 1 bit is left to MID, so
      * that the mid can be either 1 or 0.
      */
     "mid": 1,
@@ -97,14 +100,14 @@ const makeUUID = libuuid.SnowflakeSI.createGenerateor({
     /**
      * The bit-width of UIN.
      */
-    "uinWidth": 12
+    "uinBitWidth": 12
 });
 
-console.log(makeUUID()); // Generate a UUIN
-console.log(makeUUID()); // Generate a UUIN
-console.log(makeUUID.MS_CAPACITY); // See the capacity of UUIDs in 1ms
-console.log(makeUUID.MACHINE_ID); // See the machine ID.
-console.log(new Date(makeUUID.BASE_CLOCK)); // See the base-clock
+console.log(makeUUID());                    // Generate a UUID
+console.log(makeUUID());                    // Generate a UUID
+console.log(makeUUID.uinCapacity);          // See the capacity of UUIDs in 1ms
+console.log(makeUUID.machineId);            // See the machine ID.
+console.log(new Date(makeUUID.baseClock));  // See the base-clock
 ```
 
 ### Snowflake-SI-vA Usage

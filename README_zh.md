@@ -45,28 +45,30 @@ Snowflake-SI-vA 是 Snowflake-SI 算法的一个变种。
 ```ts
 import * as libuuid from "@litert/uuid";
 
-const makeUUID = libuuid.SnowflakeSI.createGenerateor({
+const factory = UUID.SnowflakeBI.createFactory();
+
+const makeUUID = factory.create({
 
     /**
      * 机器序号，默认可以取值 0 ~ 31。
      *
-     * 取值范围会根据 uinWidth 变化而变化。
+     * 取值范围会根据 uinBitWidth 变化而变化。
      */
-    "mid": 0,
+    "machineId": 2,
 
     /**
      * 业务基准时间，一旦设定绝对不能再修改。
      *
-     * 该时间不能早于 2003-03-18T07:20:20Z
+     * 该时间不能早于 2003-03-18T07:20:19.225Z.
      */
     "baseClock": new Date(2004, 0, 1, 0, 0, 0, 0).getTime()
 });
 
-console.log(makeUUID()); // 生成一个 UUID
-console.log(makeUUID()); // 再生成一个 UUID
-console.log(makeUUID.MS_CAPACITY); // 查看 UUID 生成器的毫秒容量
-console.log(makeUUID.MACHINE_ID); // 查看 UUID 生成器的机器序号
-console.log(new Date(makeUUID.BASE_CLOCK)); // 查看 UUID 生成器的业务基准时间
+console.log(makeUUID());                    // 生成一个 UUID
+console.log(makeUUID());                    // 再生成一个 UUID
+console.log(makeUUID.uinCapacity);          // 查看 UUID 生成器的毫秒容量
+console.log(makeUUID.machineId);            // 查看 UUID 生成器的机器序号
+console.log(new Date(makeUUID.baseClock));  // 查看 UUID 生成器的业务基准时间
 ```
 
 ### Snowflake-SI 算法微调
@@ -74,17 +76,19 @@ console.log(new Date(makeUUID.BASE_CLOCK)); // 查看 UUID 生成器的业务基
 ```ts
 import * as libuuid from "@litert/uuid";
 
-const makeUUID = libuuid.SnowflakeSI.createGenerateor({
+const factory = UUID.SnowflakeBI.createFactory();
+
+const makeUUID = factory.create({
 
     /**
-     * 机器序号，由于 uinWidth 被设置为 12，因此 MID 只有一个比特，只能是 1 或者 0。
+     * 机器序号，由于 uinBitWidth 被设置为 12，因此 MID 只有一个比特，只能是 1 或者 0。
      */
     "mid": 1,
 
     /**
      * 业务基准时间，一旦设定绝对不能再修改。
      *
-     * 该时间不能早于 2003-03-18T07:20:20Z
+     * 该时间不能早于 2003-03-18T07:20:19.225Z.
      */
     "baseClock": new Date(2004, 0, 1, 0, 0, 0, 0).getTime(),
 
@@ -92,14 +96,14 @@ const makeUUID = libuuid.SnowflakeSI.createGenerateor({
      * UIN 所占的位宽，此处设置为 12，即只留一位给 MID。
      * 因此每毫秒可以容纳 2 ^ 12 == 4096 个 UUID。
      */
-    "uinWidth": 12
+    "uinBitWidth": 12
 });
 
-console.log(makeUUID()); // 生成一个 UUID
-console.log(makeUUID()); // 再生成一个 UUID
-console.log(makeUUID.MS_CAPACITY); // 查看 UUID 生成器的毫秒容量
-console.log(makeUUID.MACHINE_ID); // 查看 UUID 生成器的机器序号
-console.log(new Date(makeUUID.BASE_CLOCK)); // 查看 UUID 生成器的业务基准时间
+console.log(makeUUID());                    // 生成一个 UUID
+console.log(makeUUID());                    // 再生成一个 UUID
+console.log(makeUUID.uinCapacity);          // 查看 UUID 生成器的毫秒容量
+console.log(makeUUID.machineId);            // 查看 UUID 生成器的机器序号
+console.log(new Date(makeUUID.baseClock));  // 查看 UUID 生成器的业务基准时间
 ```
 
 ### Snowflake-SI-vA 基本使用
