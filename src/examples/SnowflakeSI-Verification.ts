@@ -1,5 +1,5 @@
 /**
- *  Copyright 2019 Angus.Fenying <fenying@litert.org>
+ *  Copyright 2021 Angus.Fenying <fenying@litert.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 // tslint:disable:no-console
-import * as UUID from "../libs";
+import * as UUID from '../libs';
 
-const baseClock = new Date("2011-11-11 11:11:11").getTime();
+const baseClock = new Date('2011-11-11 11:11:11').getTime();
 
 const factory = UUID.SnowflakeSI.createFactory({ baseClock });
 

@@ -1,5 +1,5 @@
 /**
- *  Copyright 2019 Angus.Fenying <fenying@litert.org>
+ *  Copyright 2021 Angus.Fenying <fenying@litert.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,28 +15,31 @@
  */
 
 // tslint:disable:no-console
-import * as UUID from "../libs";
+import * as UUID from '../libs';
 
 const factory = UUID.SnowflakeSIvA.createFactory();
 
-const TEST_TIMES = 10000000;
+function verifySIvA(
+    uuid: number,
+    mid: number
+): boolean {
 
-const perfGen = factory.create({
-    machineId: 1
-});
-
-let timer = process.hrtime();
-
-for (let i = 0; i < TEST_TIMES; i++) {
-
-    perfGen();
+    return Math.floor(uuid / Math.pow(2, UUID.SnowflakeSIvA.UIN_LENGTH)) === mid;
 }
 
-timer = process.hrtime(timer);
+for (let i = UUID.SnowflakeSIvA.MIN_MACHINE_ID; i <= UUID.SnowflakeSIvA.MAX_MACHINE_ID; i++) {
 
-console.log("Performance");
-console.log(`SnowflakeSIvA   ${
-    timer[0].toString().padStart(2, " ")
-}.${
-    timer[1].toString().padEnd(10, "0").padEnd(16, " ")
-} ${ (TEST_TIMES / (timer[0] + timer[1] / 1e9) / 1000).toFixed(2) }/ms`);
+    const genUUID = factory.create({
+        'machineId': i
+    });
+
+    for (let t = 0; t < 1000; t++) {
+
+        if (!verifySIvA(genUUID(), i)) {
+
+            console.error(`[${i}] FAILED`);
+        }
+    }
+}
+
+console.info('Completed.');

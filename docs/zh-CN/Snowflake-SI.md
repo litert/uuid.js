@@ -2,7 +2,7 @@
 
 Snowflake-SI 算法是 Snowflake 算法的变种。标准的 Snowflake 算法使用的是 64 位整数，
 而 ECMAScript 中无法使用 64 位整数。因为在其语言规范里规定，只有取值范围在
-`-Number.MAX_SAFE_INTEGER ~ +Number.MAX_SAFE_INTEGER` 之间的整数是精确的，超出则
+`Number.MIN_SAFE_INTEGER ~ Number.MAX_SAFE_INTEGER` 之间的整数是精确的，超出则
 不再保证准确性。**因此在 ECMAScript 中能使用的整数只有 53 位、**
 
 Snowflake-SI 算法为了确保生成的 UUID 的精度，于是使用了 53 位整数作为 UUID 的生成

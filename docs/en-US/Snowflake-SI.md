@@ -3,8 +3,8 @@
 Snowflake-SI algorithm is a variety of Twitter's snowflake algorithm.
 The standard snowflake uses a 64-bits integer as output. However, the ECMAScript
 does not provides the supports of 64-bits integer. It's language standard shows
-that only integers between `-Number.MAX_SAFE_INTEGER` and 
-`+Number.MAX_SAFE_INTEGER`(including both points), are accurate, which means
+that only integers between `Number.MIN_SAFE_INTEGER` and 
+`Number.MAX_SAFE_INTEGER`(including both points), are accurate, which means
 only 53-bits integer can be used in ECMAScript.
 
 The Snowflake-SI algorithm uses 53-bits integer as the output of UUID

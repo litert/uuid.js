@@ -1,5 +1,5 @@
 /**
- *  Copyright 2019 Angus.Fenying <fenying@litert.org>
+ *  Copyright 2021 Angus.Fenying <fenying@litert.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 // tslint:disable:no-console
-import * as UUID from "../libs";
+import * as UUID from '../libs';
 
-const baseClock = new Date("2011-11-11 11:11:11").getTime();
+const baseClock = new Date('2011-11-11 11:11:11').getTime();
 
 const factory = UUID.SnowflakeSI.createFactory({ baseClock });
 
@@ -34,9 +34,9 @@ for (let i = 0; i < TEST_TIMES; i++) {
 
 timer = process.hrtime(timer);
 
-console.log("Performance");
+console.log('Performance');
 console.log(`SnowflakeSI     ${
-    timer[0].toString().padStart(2, " ")
+    timer[0].toString().padStart(2, ' ')
 }.${
-    timer[1].toString().padEnd(10, "0").padEnd(16, " ")
+    timer[1].toString().padEnd(10, '0').padEnd(16, ' ')
 } ${ (TEST_TIMES / (timer[0] + timer[1] / 1e9) / 1000).toFixed(2) }/ms`);

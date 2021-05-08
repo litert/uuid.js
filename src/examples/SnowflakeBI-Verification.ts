@@ -1,5 +1,5 @@
 /**
- *  Copyright 2019 Angus.Fenying <fenying@litert.org>
+ *  Copyright 2021 Angus.Fenying <fenying@litert.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 // tslint:disable:no-console
-import * as UUID from "../libs";
+import * as UUID from '../libs';
 
 const factory = UUID.SnowflakeBI.createFactory();
 
@@ -83,7 +83,7 @@ for (
             const IDC_ID = Math.floor((1 << ibw) / 2);
 
             const genUUID = factory.create({
-                defaultEncoding: "bin",
+                defaultEncoding: 'bin',
                 idcBitWidth: ibw,
                 idcId: IDC_ID,
                 machineBitWidth: mbw,
@@ -136,7 +136,7 @@ for (
     try {
 
         const genUUID = factory.create({
-            defaultEncoding: "bin",
+            defaultEncoding: 'bin',
             workerId: worker
         });
 

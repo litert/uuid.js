@@ -1,5 +1,5 @@
 /**
- *  Copyright 2019 Angus.Fenying <fenying@litert.org>
+ *  Copyright 2021 Angus.Fenying <fenying@litert.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,29 +15,29 @@
  */
 
 // tslint:disable:no-console
-import * as UUID from "../libs";
+import * as UUID from '../libs';
 
 const factory = UUID.SnowflakeBI.createFactory({
-    defaultEncoding: "hex"
+    defaultEncoding: 'hex'
 });
 
-function range(a: number, b: number) {
+function range(a: number, b: number): number[] {
 
-    return [..."0".repeat(b - a + 1)].map((v, i) => a + i);
+    return [...'0'.repeat(b - a + 1)].map((v, i) => a + i);
 }
 
 const encodings: UUID.SnowflakeBI.TEncoding[] = [
-    "bigint", "dec", "bin", "oct", "hex", "int64", "buffer",
+    'bigint', 'dec', 'bin', 'oct', 'hex', 'int64', 'buffer',
     ...range(2, 36)
 ];
 
 const TEST_TIMES = 10000000;
 
-console.log("Performance");
+console.log('Performance');
 for (let e of encodings) {
 
     const generator = factory.create({
-        defaultEncoding: "buffer",
+        defaultEncoding: 'buffer',
         workerId: 123
     });
 
@@ -60,13 +60,14 @@ for (let e of encodings) {
         }
         catch (e) {
 
+            console.error(e);
             continue;
         }
     }
 
-    console.log(`${e.toString().padEnd(16, " ")} ${
-        timer[0].toString().padStart(2, " ")
+    console.log(`${e.toString().padEnd(16, ' ')} ${
+        timer[0].toString().padStart(2, ' ')
     }.${
-        timer[1].toString().padEnd(10, "0").padEnd(16, " ")
+        timer[1].toString().padEnd(10, '0').padEnd(16, ' ')
     } ${ (TEST_TIMES / (timer[0] + timer[1] / 1e9) / 1000).toFixed(2) }/ms`);
 }

@@ -8,66 +8,66 @@
             "type": "node",
             "request": "launch",
             "name": "Check Snowflake-BI Performance",
-            "program": "${workspaceFolder}/src/samples/SnowflakeBI-Performance.ts",
+            "program": "${workspaceFolder}/src/examples/SnowflakeBI-Performance.ts",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/libs/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Verify Snowflake-BI Output",
-            "program": "${workspaceFolder}/src/samples/SnowflakeBI-Verification.ts",
+            "program": "${workspaceFolder}/src/examples/SnowflakeBI-Verification.ts",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/libs/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Check Snowflake-SI Performance",
-            "program": "${workspaceFolder}/src/samples/SnowflakeSI-Performance.ts",
+            "program": "${workspaceFolder}/src/examples/SnowflakeSI-Performance.ts",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/libs/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Verify Snowflake-SI Output",
-            "program": "${workspaceFolder}/src/samples/SnowflakeSI-Verification.ts",
+            "program": "${workspaceFolder}/src/examples/SnowflakeSI-Verification.ts",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/libs/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Check Snowflake-SI-vA Performance",
-            "program": "${workspaceFolder}/src/samples/SnowflakeSIvA-Performance.ts",
+            "program": "${workspaceFolder}/src/examples/SnowflakeSIvA-Performance.ts",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/libs/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Verify Snowflake-SI-vA Output",
-            "program": "${workspaceFolder}/src/samples/SnowflakeSIvA-Verification.ts",
+            "program": "${workspaceFolder}/src/examples/SnowflakeSIvA-Verification.ts",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/libs/*.js",
-                "${workspaceFolder}/samples/*.js"
+                "${workspaceFolder}/examples/*.js"
             ]
         }
     ]

@@ -1,5 +1,5 @@
 /**
- *  Copyright 2019 Angus.Fenying <fenying@litert.org>
+ *  Copyright 2021 Angus.Fenying <fenying@litert.org>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-export * from "./Errors";
-export * from "./SnowflakeBI";
-export * from "./SnowflakeSIvA";
-export * from "./SnowflakeSI";
+export * from './Errors';
+export * as SnowflakeBI from './SnowflakeBI';
+export * as SnowflakeSIvA from './SnowflakeSIvA';
+export * as SnowflakeSI from './SnowflakeSI';
