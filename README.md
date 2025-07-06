@@ -7,7 +7,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/litert/uuid.js.svg)](https://github.com/litert/uuid.js/issues)
 [![GitHub Releases](https://img.shields.io/github/release/litert/uuid.js.svg)](https://github.com/litert/uuid.js/releases "Stable Release")
 
-A uuid generator library for LiteRT framework.
+A uuid generator library for NodeJS.
 
 ## Requirement
 
