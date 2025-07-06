@@ -1,3 +1,4 @@
-/libs/
-/samples/
+/lib/
+/examples/
 /node_modules/
+typedoc-sidebar.json

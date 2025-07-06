@@ -1,5 +1,15 @@
 # Changes Logs
 
+## v2.0.0
+
+- feat(algo): added implements of GUIDv4 algorithm.
+- feat(algo): added implements of GUIDv5 algorithm.
+- fix(algo): allow Snowflake using custom epoch.
+- fix(algo): implement Snowflake-SI with more customization options.
+- deprecate(algo): removed the Snowflake-SI-vA algorithm, which is no longer recommended.
+- test(project): added unit tests.
+- deprecate(deps): removed all runtime dependencies.
+
 ## v1.0.0
 
 - Refactored the project.
