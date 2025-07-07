@@ -70,11 +70,23 @@ export class SnowflakeGenerator {
             options.machineId > SnowflakeGenerator.MAX_MACHINE_ID
         ) {
 
-            throw new eL.E_INVALID_MACHINE_ID({ machineId: options.machineId });
+            throw new eL.E_INVALID_SNOWFLAKE_SETTINGS({
+                'reason': 'invalid_machine_id',
+                'machineId': options.machineId,
+            });
         }
 
         this.machineId = options.machineId;
         this.epoch = options.epoch ?? 0;
+
+        if (typeof this.epoch !== 'number' || !Number.isSafeInteger(this.epoch) || this.epoch < 0) {
+
+            throw new eL.E_INVALID_SNOWFLAKE_SETTINGS({
+                'reason': 'invalid_epoch',
+                'epoch': this.epoch,
+            });
+        }
+
         this._biInstId = BigInt(options.machineId) << BI_OFFSET_MAC_ID;
     }
 

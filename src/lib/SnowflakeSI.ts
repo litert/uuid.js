@@ -108,14 +108,14 @@ export class SnowflakeSiGenerator {
 
     private readonly _clockFactor: number;
 
-    public constructor(options: ISnowflakeSiOptions) {
+    public constructor(opts: ISnowflakeSiOptions) {
 
-        const clockWidth = options.clockBitWidth ?? DEFAULT_CLOCK_BIT_WIDTH;
+        const clockWidth = opts.clockBitWidth ?? DEFAULT_CLOCK_BIT_WIDTH;
 
         const LOW_BIT_WIDTH = MAX_ID_BIT_LENGTH - clockWidth;
 
-        const midWidth = options.machineIdBitWidth ?? DEFAULT_MACHINE_ID_BIT_WIDTH;
-        const seqWidth = options.sequenceBitWidth ?? (LOW_BIT_WIDTH - midWidth);
+        const midWidth = opts.machineIdBitWidth ?? DEFAULT_MACHINE_ID_BIT_WIDTH;
+        const seqWidth = opts.sequenceBitWidth ?? (LOW_BIT_WIDTH - midWidth);
 
         if (
             !Number.isInteger(clockWidth) ||
@@ -131,43 +131,51 @@ export class SnowflakeSiGenerator {
                 'reason': 'invalid_bit_width',
                 'machineIdBitWidth': midWidth,
                 'clockBitWidth': clockWidth,
-                'sequenceBitWidth': seqWidth
+                'sequenceBitWidth': seqWidth,
             });
         }
 
         const MAX_MACHINE_ID = (1 << midWidth) - 1;
 
         if (
-            !Number.isInteger(options.machineId) ||
-            options.machineId < MIN_MACHINE_ID ||
-            options.machineId > MAX_MACHINE_ID
+            !Number.isInteger(opts.machineId) ||
+            opts.machineId < MIN_MACHINE_ID ||
+            opts.machineId > MAX_MACHINE_ID
         ) {
 
             throw new eL.E_INVALID_SNOWFLAKE_SETTINGS({
                 'reason': 'invalid_machine_id',
                 'machineIdBitWidth': midWidth,
-                'machineId': options.machineId
+                'machineId': opts.machineId,
             });
         }
 
-        if (clockWidth === 40 && options.epoch < MIN_EPOCH_40) {
+        if (clockWidth === 40 && opts.epoch < MIN_EPOCH_40) {
 
             throw new eL.E_INVALID_SNOWFLAKE_SETTINGS({
                 'reason': 'epoch_too_early',
-                'epoch': options.epoch,
+                'epoch': opts.epoch,
                 'clockBitWidth': clockWidth,
-                'minEpoch': MIN_EPOCH_40
+                'minEpoch': MIN_EPOCH_40,
             });
         }
 
-        this.epoch = options.epoch;
-        this.machineId = options.machineId;
+        if (typeof opts.epoch !== 'number' || !Number.isSafeInteger(opts.epoch) || opts.epoch < 0) {
+
+            throw new eL.E_INVALID_SNOWFLAKE_SETTINGS({
+                'reason': 'invalid_epoch',
+                'epoch': opts.epoch,
+            });
+        }
+
+        this.epoch = opts.epoch;
+        this.machineId = opts.machineId;
         this.machineIdBitWidth = midWidth;
         this.sequenceBitWidth = seqWidth;
         this.clockBitWidth = clockWidth;
         this._clockFactor = 1 << LOW_BIT_WIDTH;
         this.maximumSequence = (1 << this.sequenceBitWidth) - 1;
-        this._midPart = options.machineId << this.sequenceBitWidth;
+        this._midPart = opts.machineId << this.sequenceBitWidth;
     }
 
     /**

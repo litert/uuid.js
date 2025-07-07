@@ -62,6 +62,27 @@ NodeTest.describe('Snowflake SI', () => {
         }
     });
 
+    NodeTest.it('for invalid epoch, an error should be thrown', (ct) => {
+
+        for (const invalidSettings of [
+            { machineId: 1, epoch: 1.1, machineIdBitWidth: 5, clockBitWidth: 41 },
+            { machineId: 1, epoch: -1.1, machineIdBitWidth: 5, clockBitWidth: 41 },
+            { machineId: 1, epoch: -1, machineIdBitWidth: 5, clockBitWidth: 41 },
+            { machineId: 1, epoch: NaN, machineIdBitWidth: 5, clockBitWidth: 41 },
+            { machineId: 1, epoch: Infinity, machineIdBitWidth: 5, clockBitWidth: 41 },
+            { machineId: 1, epoch: '' as unknown as number, machineIdBitWidth: 5, clockBitWidth: 41 },
+            { machineId: 1, epoch: [] as unknown as number, machineIdBitWidth: 5, clockBitWidth: 41 },
+            { machineId: 1, epoch: {} as unknown as number, machineIdBitWidth: 5, clockBitWidth: 41 },
+            { machineId: 1, epoch: 1n as unknown as number, machineIdBitWidth: 5, clockBitWidth: 41 },
+            { machineId: 1, epoch: Symbol('') as unknown as number, machineIdBitWidth: 5, clockBitWidth: 41 },
+        ] satisfies Snowflake.ISnowflakeSiOptions[]) {
+
+            NodeAssert.throws(() => {
+                new Snowflake.SnowflakeSiGenerator(invalidSettings);
+            }, eL.E_INVALID_SNOWFLAKE_SETTINGS);
+        }
+    });
+
     NodeTest.it('generate method should work', (ctx) => {
 
         const epoch = Date.parse('2023-11-11 22:22:22');

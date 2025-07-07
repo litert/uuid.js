@@ -5,12 +5,33 @@ import * as eL from './Errors';
 
 NodeTest.describe('Snowflake', () => {
 
-    NodeTest.it('for invalid machine ID, an error should be thrown', (ct) => {
+    NodeTest.it('for invalid machine ID, an error should be thrown', () => {
 
         for (const machineId of [NaN, null, 0.1, -1, 1024, 123456789, Infinity]) {
             NodeAssert.throws(() => {
                 new Snowflake.SnowflakeGenerator({ machineId: machineId as number });
-            }, eL.E_INVALID_MACHINE_ID);
+            }, eL.E_INVALID_SNOWFLAKE_SETTINGS);
+        }
+    });
+
+    NodeTest.it('for invalid epoch, an error should be thrown', () => {
+
+        for (const invalidSettings of [
+            { machineId: 1, epoch: 1.1, },
+            { machineId: 1, epoch: -1.1, },
+            { machineId: 1, epoch: -1, },
+            { machineId: 1, epoch: NaN, },
+            { machineId: 1, epoch: Infinity, },
+            { machineId: 1, epoch: '' as unknown as number, },
+            { machineId: 1, epoch: [] as unknown as number, },
+            { machineId: 1, epoch: Symbol('123') as unknown as number, },
+            { machineId: 1, epoch: 9n as unknown as number, },
+        ] satisfies Snowflake.ISnowflakeOptions[]) {
+
+            console.log(invalidSettings);
+            NodeAssert.throws(() => {
+                new Snowflake.SnowflakeGenerator(invalidSettings);
+            }, eL.E_INVALID_SNOWFLAKE_SETTINGS);
         }
     });
 

@@ -43,19 +43,6 @@ export abstract class UuidError extends Error {
     }
 }
 
-export const E_INVALID_MACHINE_ID = class extends UuidError {
-
-    public constructor(ctx: Record<string, unknown> = {}, origin?: unknown) {
-
-        super(
-            'invalid_machine_id',
-            'The machine ID is invalid.',
-            ctx,
-            origin,
-        );
-    }
-};
-
 export const E_INVALID_SNOWFLAKE_SETTINGS = class extends UuidError {
 
     public constructor(ctx: Record<string, unknown> = {}, origin?: unknown) {

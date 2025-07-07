@@ -85,7 +85,7 @@ The minimum machine ID that can be used by the generator.
 
 > **generate**(): `bigint`
 
-Defined in: [Snowflake.ts:90](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L90)
+Defined in: [Snowflake.ts:102](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L102)
 
 Generate the next Snowflake ID, based on the current time and the next sequence number.
 
@@ -113,7 +113,7 @@ If the current time is before the epoch.
 
 > **generateBy**(`timestamp`, `sequence`): `bigint`
 
-Defined in: [Snowflake.ts:130](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L130)
+Defined in: [Snowflake.ts:142](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L142)
 
 Generate a Snowflake ID by specifying the timestamp and sequence number.
 

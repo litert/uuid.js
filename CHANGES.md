@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v2.0.1
+
+- fix(algo): snowflake class constructor should check if `epoch` is invalid.
+
 ## v2.0.0
 
 - feat(algo): added implements of GUIDv4 algorithm.
