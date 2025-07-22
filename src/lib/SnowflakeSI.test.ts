@@ -146,7 +146,7 @@ NodeTest.describe('Snowflake SI', () => {
         testSnowflakeId(g, g.generate(), 123456789, 12, 1);
     });
 
-    NodeTest.it('sequence should be reset to 0 if time is changed', (ctx) => {
+    NodeTest.it('sequence should keep increasing even if time is changed', (ctx) => {
 
         const epoch = Date.parse('2023-11-11 22:22:22');
 
@@ -160,19 +160,19 @@ NodeTest.describe('Snowflake SI', () => {
 
         ctx.mock.timers.tick(123456789);
 
-        // sequence should start from 0
+        // sequence should start from 0 for a new generator
         g.generate();
 
         testSnowflakeId(g, g.generate(), 123456789, 12, 1);
 
-        // sequence should reset to 0 if the time is changed
+        // sequence should keep increasing even if the time is changed
         ctx.mock.timers.tick(1);
-        testSnowflakeId(g, g.generate(), 123456790, 12, 0);
+        testSnowflakeId(g, g.generate(), 123456790, 12, 2);
 
         ctx.mock.timers.tick(1000);
-        testSnowflakeId(g, g.generate(), 123457790, 12, 0);
-        testSnowflakeId(g, g.generate(), 123457790, 12, 1);
-        testSnowflakeId(g, g.generate(), 123457790, 12, 2);
+        testSnowflakeId(g, g.generate(), 123457790, 12, 3);
+        testSnowflakeId(g, g.generate(), 123457790, 12, 4);
+        testSnowflakeId(g, g.generate(), 123457790, 12, 5);
     });
 
     NodeTest.it('error should be thrown if time goes back to the past', (ctx) => {
@@ -235,6 +235,11 @@ NodeTest.describe('Snowflake SI', () => {
 
         NodeAssert.throws(() => { g.generate(); }, eL.E_SEQUENCE_OVERFLOWED);
         NodeAssert.throws(() => { g.generateBy(epoch + 1000, g.maximumSequence + 1); }, eL.E_SEQUENCE_OVERFLOWED);
+
+        // increasing the time should reset the counter of generated IDs in this millisecond
+        // so a new ID can be generated again
+        ctx.mock.timers.tick(1);
+        g.generate();
     });
 
     NodeTest.it('error should be thrown if current time is before the epoch', (ctx) => {

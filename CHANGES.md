@@ -1,5 +1,12 @@
 # Changes Logs
 
+## v2.0.2
+
+- fix(algo): snowflake/snowflake-si class should not reset sequence to 0 avoiding sequence overflow.
+
+    To ensure the randomness of the generated IDs, the sequence number must keep increasing even if the time is
+    changed. Thus an additional counter will be used to track the quantity of IDs generated in the same millisecond.
+
 ## v2.0.1
 
 - fix(algo): snowflake class constructor should check if `epoch` is invalid.

@@ -1,6 +1,6 @@
 {
   "name": "@litert/uuid",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A uuid generator library for NodeJS.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

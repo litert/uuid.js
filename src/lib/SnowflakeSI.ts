@@ -106,6 +106,8 @@ export class SnowflakeSiGenerator {
 
     private _seq: number = 0;
 
+    private _countPerMs: number = 0;
+
     private readonly _clockFactor: number;
 
     public constructor(opts: ISnowflakeSiOptions) {
@@ -206,14 +208,16 @@ export class SnowflakeSiGenerator {
         if (this._prevTime !== t) {
 
             this._prevTime = t;
-            this._seq = 0;
+            this._countPerMs = 0;
         }
-        else if (this._seq > this.maximumSequence) {
+        else if (this._countPerMs > this.maximumSequence) {
 
             throw new eL.E_SEQUENCE_OVERFLOWED();
         }
 
-        return (t * this._clockFactor) + this._midPart + this._seq++;
+        this._countPerMs++;
+
+        return (t * this._clockFactor) + this._midPart + (this._seq++ & this.maximumSequence);
     }
 
     /**

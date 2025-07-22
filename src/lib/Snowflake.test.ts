@@ -86,33 +86,33 @@ NodeTest.describe('Snowflake', () => {
         NodeAssert.strictEqual(id1.slice(-12), (1).toString(2).padStart(12, '0'));
     });
 
-    NodeTest.it('sequence should be reset to 0 if time is changed', (ctx) => {
+    NodeTest.it('sequence should keep increasing even if time is changed', (ctx) => {
 
         ctx.mock.timers.enable({ apis: ['Date'], now: 123456789 });
         const g = new Snowflake.SnowflakeGenerator({ machineId: 123 });
 
-        // sequence should start from 0
+        // sequence should start from 0 for a new generator
         g.generate();
 
-        // sequence should increase by 1 if the time is not changed
+        // sequence should increase by 1
         const id0 = g.generate().toString(2);
 
         NodeAssert.strictEqual(id0.slice(-12), (1).toString(2).padStart(12, '0'));
 
-        // sequence should reset to 0 if the time is changed
+        // sequence should keep increasing even if the time is changed
         ctx.mock.timers.tick(1);
         const id1 = g.generate().toString(2);
 
         NodeAssert.strictEqual(id1.slice(0, -22), (123456790).toString(2));
         NodeAssert.strictEqual(id1.slice(-22, -12), (123).toString(2).padStart(10, '0'));
-        NodeAssert.strictEqual(id1.slice(-12), (0).toString(2).padStart(12, '0'));
+        NodeAssert.strictEqual(id1.slice(-12), (2).toString(2).padStart(12, '0'));
 
         ctx.mock.timers.tick(1000);
 
         const id2 = g.generate().toString(2);
         NodeAssert.strictEqual(id2.slice(0, -22), (123457790).toString(2));
         NodeAssert.strictEqual(id2.slice(-22, -12), (123).toString(2).padStart(10, '0'));
-        NodeAssert.strictEqual(id2.slice(-12), (0).toString(2).padStart(12, '0'));
+        NodeAssert.strictEqual(id2.slice(-12), (3).toString(2).padStart(12, '0'));
     });
 
     NodeTest.it('error should be thrown if time goes back to the past', (ctx) => {
@@ -141,6 +141,11 @@ NodeTest.describe('Snowflake', () => {
 
         NodeAssert.throws(() => { g.generate(); }, eL.E_SEQUENCE_OVERFLOWED);
         NodeAssert.throws(() => { g.generateBy(1234, 4096); }, eL.E_SEQUENCE_OVERFLOWED);
+
+        // increasing the time should reset the counter of generated IDs in this millisecond
+        // so a new ID can be generated again
+        ctx.mock.timers.tick(1);
+        g.generate();
     });
     
     NodeTest.it('error should be thrown if current time is before the epoch', (ctx) => {

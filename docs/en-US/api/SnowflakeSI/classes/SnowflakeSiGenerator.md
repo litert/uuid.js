@@ -12,7 +12,7 @@ The class for generating Snowflake (Safe-Integer) IDs.
 
 > **new SnowflakeSiGenerator**(`opts`): `SnowflakeSiGenerator`
 
-Defined in: [SnowflakeSI.ts:111](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L111)
+Defined in: [SnowflakeSI.ts:113](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L113)
 
 #### Parameters
 
@@ -127,7 +127,7 @@ The sum of `machineIdBitWidth` and `sequenceBitWidth` must be 12.
 
 > **generate**(): `number`
 
-Defined in: [SnowflakeSI.ts:190](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L190)
+Defined in: [SnowflakeSI.ts:192](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L192)
 
 Generate the next SnowflakeSI ID, based on the current time and the next sequence number.
 
@@ -155,7 +155,7 @@ If the current time is earlier than the epoch.
 
 > **generateBy**(`timestamp`, `sequence`): `number`
 
-Defined in: [SnowflakeSI.ts:230](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L230)
+Defined in: [SnowflakeSI.ts:234](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L234)
 
 Generate a SnowflakeSI ID by specifying the timestamp and sequence number.
 

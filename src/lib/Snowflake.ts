@@ -19,7 +19,8 @@ export type ISnowflakeOptions = Pick<SnowflakeGenerator, 'machineId'> & Partial<
 
 const BI_OFFSET_TIMESTAMP = 22n;
 const BI_OFFSET_MAC_ID = 12n;
-const BI_MAX_SEQUENCE_NUMBER = 4095n;
+const MAX_SEQUENCE_NUMBER = 4095;
+const BI_MAX_SEQUENCE_NUMBER = BigInt(MAX_SEQUENCE_NUMBER);
 
 /**
  * The class for generating Snowflake IDs.
@@ -62,6 +63,8 @@ export class SnowflakeGenerator {
     private _prevTime: number = 0;
 
     private _seq: bigint = 0n;
+
+    private _countPerMs = 0;
 
     public constructor(options: ISnowflakeOptions) {
 
@@ -118,14 +121,16 @@ export class SnowflakeGenerator {
         if (this._prevTime !== t) {
 
             this._prevTime = t;
-            this._seq = 0n;
+            this._countPerMs = 0;
         }
-        else if (this._seq > BI_MAX_SEQUENCE_NUMBER) {
+        else if (this._countPerMs > MAX_SEQUENCE_NUMBER) {
 
             throw new eL.E_SEQUENCE_OVERFLOWED();
         }
 
-        return (BigInt(t) << BI_OFFSET_TIMESTAMP) + this._biInstId + this._seq++;
+        this._countPerMs++;
+
+        return (BigInt(t) << BI_OFFSET_TIMESTAMP) + this._biInstId + (this._seq++ & BI_MAX_SEQUENCE_NUMBER);
     }
 
     /**
@@ -141,7 +146,7 @@ export class SnowflakeGenerator {
      */
     public generateBy(timestamp: number, sequence: number): bigint {
 
-        if (sequence > 4095) {
+        if (sequence > MAX_SEQUENCE_NUMBER) {
 
             throw new eL.E_SEQUENCE_OVERFLOWED({ sequence });
         }
