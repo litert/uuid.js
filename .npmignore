@@ -13,3 +13,4 @@
 /.husky/
 /eslint.config.js
 /commitlint.config.js
+*.test.*
