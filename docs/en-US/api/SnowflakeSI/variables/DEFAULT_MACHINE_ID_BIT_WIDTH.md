@@ -4,7 +4,7 @@
 
 > `const` **DEFAULT\_MACHINE\_ID\_BIT\_WIDTH**: `5` = `5`
 
-Defined in: [SnowflakeSI.ts:36](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L36)
+Defined in: [SnowflakeSI.ts:65](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L65)
 
 The default bit width of the machine ID is 5 bits, which means the range of the machine ID is [0, 31].
 

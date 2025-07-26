@@ -14,10 +14,39 @@
  *  limitations under the License.
  */
 import * as eL from './Errors';
+import * as Sf from './Snowflake';
 
-export type ISnowflakeSiOptions = Pick<SnowflakeSiGenerator, 'machineId' | 'epoch'> & Partial<Pick<
+export interface ISnowflakeSiOptions extends Pick<SnowflakeSiGenerator, 'machineId' | 'epoch'>, Partial<Pick<
     SnowflakeSiGenerator, 'machineIdBitWidth' | 'clockBitWidth' | 'sequenceBitWidth'
->>;
+>> {
+
+    /**
+     * The strategy for handling time reversal events.
+     *
+     * @default ESnowflakeTimeReversedStrategy.THROW_ERROR
+     */
+    onTimeReversed?: Sf.ESnowflakeTimeReversedStrategy;
+
+    /**
+     * The strategy for handling the sequence number when the time changes.
+     *
+     * This option also accepts a custom function that takes the current sequence number
+     * and returns the new sequence number.
+     *
+     * @default Sf.ESnowflakeSequenceStrategy.RESET
+     */
+    onTimeChanged?: Sf.ESnowflakeSequenceStrategy | Sf.ISnowflakeUpdateSequenceOnTimeChanged<number>;
+
+    /**
+     * When the sequence strategy is set to `ESnowflakeSequenceStrategy.RESET`,
+     * this option specifies the threshold for resetting the sequence number.
+     * So only when the sequence number exceeds this threshold, the sequence number
+     * will be reset to 0.
+     *
+     * @default 0
+     */
+    sequenceResetThreshold?: number;
+}
 
 const MIN_BIT_WIDTH = 1;
 const MIN_MACHINE_ID = 0;
@@ -44,6 +73,17 @@ export const DEFAULT_CLOCK_BIT_WIDTH = 40;
  * The class for generating Snowflake (Safe-Integer) IDs.
  */
 export class SnowflakeSiGenerator {
+
+    /**
+     * The strategy for the time reversal event.
+     */
+    private readonly _onTimeReversedStrategy: Sf.ESnowflakeTimeReversedStrategy;
+
+    private readonly _onTimeChangedCallback!: Sf.ISnowflakeUpdateSequenceOnTimeChanged<number>;
+
+    private readonly _onTimeChangedStrategy: Sf.ESnowflakeSequenceStrategy | false;
+
+    private readonly _onTimeChangedResetThreshold: number = 0;
 
     /**
      * The identifier of the machine that generates the UUID.
@@ -178,6 +218,39 @@ export class SnowflakeSiGenerator {
         this._clockFactor = 1 << LOW_BIT_WIDTH;
         this.maximumSequence = (1 << this.sequenceBitWidth) - 1;
         this._midPart = opts.machineId << this.sequenceBitWidth;
+        this._onTimeReversedStrategy = opts.onTimeReversed ?? Sf.SNOWFLAKE_DEFAULT_TIME_REVERSAL_STRATEGY;
+
+        switch (opts.onTimeChanged ?? Sf.SNOWFLAKE_DEFAULT_TIME_CHANGED_STRATEGY) {
+
+            case Sf.ESnowflakeSequenceStrategy.RESET:
+
+                const seqResetThreshold = opts.sequenceResetThreshold ?? 0;
+
+                if (
+                    !Number.isInteger(seqResetThreshold) ||
+                    seqResetThreshold < 0 ||
+                    seqResetThreshold > this.maximumSequence
+                ) {
+
+                    throw new eL.E_INVALID_SNOWFLAKE_SETTINGS({
+                        'reason': 'invalid_sequence_reset_threshold',
+                        'sequenceResetThreshold': seqResetThreshold,
+                    });
+                }
+
+                this._onTimeChangedStrategy = Sf.ESnowflakeSequenceStrategy.RESET;
+                this._onTimeChangedResetThreshold = seqResetThreshold;
+
+                break;
+
+            case Sf.ESnowflakeSequenceStrategy.KEEP_CURRENT:
+                this._onTimeChangedStrategy = Sf.ESnowflakeSequenceStrategy.KEEP_CURRENT;
+                break;
+            default:
+                this._onTimeChangedStrategy = false;
+                this._onTimeChangedCallback = opts.onTimeChanged as Sf.ISnowflakeUpdateSequenceOnTimeChanged<number>;
+                break;
+        }
     }
 
     /**
@@ -198,17 +271,42 @@ export class SnowflakeSiGenerator {
             throw new eL.E_TIME_BEFORE_EPOCH({ epoch: this.epoch, time: NOW });
         }
 
-        const t = NOW - this.epoch;
+        let timeOffset = NOW - this.epoch;
 
-        if (this._prevTime > t) {
+        if (this._prevTime > timeOffset) {
 
-            throw new eL.E_TIME_REVERSED({ previous: this._prevTime, time: t });
+            switch (this._onTimeReversedStrategy) {
+                case Sf.ESnowflakeTimeReversedStrategy.THROW_ERROR:
+                    throw new eL.E_TIME_REVERSED({
+                        previous: this._prevTime + this.epoch,
+                        current: timeOffset + this.epoch
+                    });
+                case Sf.ESnowflakeTimeReversedStrategy.USE_REVERSED_TIME:
+                    // do nothing, because `timeOffset` is the reversed time.
+                    break;
+                case Sf.ESnowflakeTimeReversedStrategy.USE_PREVIOUS_TIME:
+                    timeOffset = this._prevTime;
+                    break;
+            }
         }
 
-        if (this._prevTime !== t) {
+        if (this._prevTime !== timeOffset) {
 
-            this._prevTime = t;
+            this._prevTime = timeOffset;
             this._countPerMs = 0;
+
+            switch (this._onTimeChangedStrategy) {
+                case Sf.ESnowflakeSequenceStrategy.RESET:
+                    if (this._seq >= this._onTimeChangedResetThreshold) {
+                        this._seq = 0;
+                    }
+                    break;
+                case Sf.ESnowflakeSequenceStrategy.KEEP_CURRENT:
+                    // do nothing, because the sequence number will be incremented.
+                    break;
+                default:
+                    this._seq = this._onTimeChangedCallback(this._seq);
+            }
         }
         else if (this._countPerMs > this.maximumSequence) {
 
@@ -217,7 +315,7 @@ export class SnowflakeSiGenerator {
 
         this._countPerMs++;
 
-        return (t * this._clockFactor) + this._midPart + (this._seq++ & this.maximumSequence);
+        return (timeOffset * this._clockFactor) + this._midPart + (this._seq++ & this.maximumSequence);
     }
 
     /**

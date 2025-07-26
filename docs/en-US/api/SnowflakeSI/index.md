@@ -6,9 +6,9 @@
 
 - [SnowflakeSiGenerator](classes/SnowflakeSiGenerator.md)
 
-## Type Aliases
+## Interfaces
 
-- [ISnowflakeSiOptions](type-aliases/ISnowflakeSiOptions.md)
+- [ISnowflakeSiOptions](interfaces/ISnowflakeSiOptions.md)
 
 ## Variables
 

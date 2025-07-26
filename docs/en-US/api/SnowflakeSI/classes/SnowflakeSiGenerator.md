@@ -2,7 +2,7 @@
 
 # Class: SnowflakeSiGenerator
 
-Defined in: [SnowflakeSI.ts:46](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L46)
+Defined in: [SnowflakeSI.ts:75](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L75)
 
 The class for generating Snowflake (Safe-Integer) IDs.
 
@@ -12,13 +12,13 @@ The class for generating Snowflake (Safe-Integer) IDs.
 
 > **new SnowflakeSiGenerator**(`opts`): `SnowflakeSiGenerator`
 
-Defined in: [SnowflakeSI.ts:113](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L113)
+Defined in: [SnowflakeSI.ts:153](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L153)
 
 #### Parameters
 
 ##### opts
 
-[`ISnowflakeSiOptions`](../type-aliases/ISnowflakeSiOptions.md)
+[`ISnowflakeSiOptions`](../interfaces/ISnowflakeSiOptions.md)
 
 #### Returns
 
@@ -30,7 +30,7 @@ Defined in: [SnowflakeSI.ts:113](https://github.com/litert/uuid.js/blob/master/s
 
 > `readonly` **clockBitWidth**: `number`
 
-Defined in: [SnowflakeSI.ts:96](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L96)
+Defined in: [SnowflakeSI.ts:136](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L136)
 
 The bit width of the clock part.
 
@@ -50,7 +50,7 @@ keep the clock part within 40 bits (before `2038-01-19T03:14:07Z`).
 
 > `readonly` **epoch**: `number`
 
-Defined in: [SnowflakeSI.ts:67](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L67)
+Defined in: [SnowflakeSI.ts:107](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L107)
 
 The epoch of the generator.
 
@@ -60,7 +60,7 @@ The epoch of the generator.
 
 > `readonly` **machineId**: `number`
 
-Defined in: [SnowflakeSI.ts:62](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L62)
+Defined in: [SnowflakeSI.ts:102](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L102)
 
 The identifier of the machine that generates the UUID.
 
@@ -81,7 +81,7 @@ The range of the machine ID depends on the `machineIdBitWidth`:
 
 > `readonly` **machineIdBitWidth**: `number`
 
-Defined in: [SnowflakeSI.ts:76](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L76)
+Defined in: [SnowflakeSI.ts:116](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L116)
 
 The bit width of the machine ID, must be an integer between 1 and 8.
 
@@ -99,7 +99,7 @@ The sum of `machineIdBitWidth` and `sequenceBitWidth` must be 12.
 
 > `readonly` **maximumSequence**: `number`
 
-Defined in: [SnowflakeSI.ts:103](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L103)
+Defined in: [SnowflakeSI.ts:143](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L143)
 
 The maximum sequence of the generator, per millisecond.
 
@@ -109,7 +109,7 @@ The maximum sequence of the generator, per millisecond.
 
 > `readonly` **sequenceBitWidth**: `number`
 
-Defined in: [SnowflakeSI.ts:85](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L85)
+Defined in: [SnowflakeSI.ts:125](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L125)
 
 The bit width of the sequence number, must be an integer between 8 and 11.
 
@@ -127,7 +127,7 @@ The sum of `machineIdBitWidth` and `sequenceBitWidth` must be 12.
 
 > **generate**(): `number`
 
-Defined in: [SnowflakeSI.ts:192](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L192)
+Defined in: [SnowflakeSI.ts:265](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L265)
 
 Generate the next SnowflakeSI ID, based on the current time and the next sequence number.
 
@@ -155,7 +155,7 @@ If the current time is earlier than the epoch.
 
 > **generateBy**(`timestamp`, `sequence`): `number`
 
-Defined in: [SnowflakeSI.ts:234](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L234)
+Defined in: [SnowflakeSI.ts:332](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L332)
 
 Generate a SnowflakeSI ID by specifying the timestamp and sequence number.
 

@@ -1,10 +1,11 @@
 import * as NodeTest from 'node:test';
 import * as NodeAssert from 'node:assert';
-import * as Snowflake from './SnowflakeSI';
+import * as SnowflakeSI from './SnowflakeSI';
+import * as Snowflake from './Snowflake';
 import * as eL from './Errors';
 
 function testSnowflakeId(
-    generator: Snowflake.SnowflakeSiGenerator,
+    generator: SnowflakeSI.SnowflakeSiGenerator,
     id: number,
     clock: number,
     machineId: number,
@@ -32,7 +33,7 @@ NodeTest.describe('Snowflake SI', () => {
 
         for (const machineId of [NaN, null, 0.1, -1, 1024, 123456789, Infinity]) {
             NodeAssert.throws(() => {
-                new Snowflake.SnowflakeSiGenerator({
+                new SnowflakeSI.SnowflakeSiGenerator({
                     machineId: machineId as number,
                     epoch: Date.parse('2023-11-11 11:11:11'),
                     machineIdBitWidth: 5,
@@ -54,10 +55,10 @@ NodeTest.describe('Snowflake SI', () => {
             { machineId: 1, epoch: OK_EPOCH, machineIdBitWidth: 13, clockBitWidth: 40 },
             { machineId: 1, epoch: OK_EPOCH, sequenceBitWidth: 13, clockBitWidth: 40 },
             { machineId: 1, epoch: 12345, clockBitWidth: 40 },
-        ] satisfies Snowflake.ISnowflakeSiOptions[]) {
+        ] satisfies SnowflakeSI.ISnowflakeSiOptions[]) {
 
             NodeAssert.throws(() => {
-                new Snowflake.SnowflakeSiGenerator(invalidSettings);
+                new SnowflakeSI.SnowflakeSiGenerator(invalidSettings);
             }, eL.E_INVALID_SNOWFLAKE_SETTINGS);
         }
     });
@@ -75,10 +76,10 @@ NodeTest.describe('Snowflake SI', () => {
             { machineId: 1, epoch: {} as unknown as number, machineIdBitWidth: 5, clockBitWidth: 41 },
             { machineId: 1, epoch: 1n as unknown as number, machineIdBitWidth: 5, clockBitWidth: 41 },
             { machineId: 1, epoch: Symbol('') as unknown as number, machineIdBitWidth: 5, clockBitWidth: 41 },
-        ] satisfies Snowflake.ISnowflakeSiOptions[]) {
+        ] satisfies SnowflakeSI.ISnowflakeSiOptions[]) {
 
             NodeAssert.throws(() => {
-                new Snowflake.SnowflakeSiGenerator(invalidSettings);
+                new SnowflakeSI.SnowflakeSiGenerator(invalidSettings);
             }, eL.E_INVALID_SNOWFLAKE_SETTINGS);
         }
     });
@@ -95,7 +96,7 @@ NodeTest.describe('Snowflake SI', () => {
 
             for (const cbw of [40, 41]) {
 
-                const g = new Snowflake.SnowflakeSiGenerator({
+                const g = new SnowflakeSI.SnowflakeSiGenerator({
                     machineId: 1,
                     epoch: epoch,
                     machineIdBitWidth: i,
@@ -117,7 +118,7 @@ NodeTest.describe('Snowflake SI', () => {
 
         const epoch = Date.parse('2023-11-11 22:22:22');
 
-        const g = new Snowflake.SnowflakeSiGenerator({
+        const g = new SnowflakeSI.SnowflakeSiGenerator({
             machineId: 12,
             epoch: epoch,
             machineIdBitWidth: 4,
@@ -133,7 +134,7 @@ NodeTest.describe('Snowflake SI', () => {
 
         ctx.mock.timers.enable({ apis: ['Date'], now: epoch });
 
-        const g = new Snowflake.SnowflakeSiGenerator({
+        const g = new SnowflakeSI.SnowflakeSiGenerator({
             machineId: 12,
             epoch: epoch,
             machineIdBitWidth: 4,
@@ -146,13 +147,13 @@ NodeTest.describe('Snowflake SI', () => {
         testSnowflakeId(g, g.generate(), 123456789, 12, 1);
     });
 
-    NodeTest.it('sequence should keep increasing even if time is changed', (ctx) => {
+    NodeTest.it('sequence should be reset to 0 if time is changed', (ctx) => {
 
         const epoch = Date.parse('2023-11-11 22:22:22');
 
         ctx.mock.timers.enable({ apis: ['Date'], now: epoch });
 
-        const g = new Snowflake.SnowflakeSiGenerator({
+        const g = new SnowflakeSI.SnowflakeSiGenerator({
             machineId: 12,
             epoch: epoch,
             machineIdBitWidth: 4,
@@ -160,38 +161,91 @@ NodeTest.describe('Snowflake SI', () => {
 
         ctx.mock.timers.tick(123456789);
 
-        // sequence should start from 0 for a new generator
+        // sequence should start from 0
         g.generate();
 
         testSnowflakeId(g, g.generate(), 123456789, 12, 1);
 
-        // sequence should keep increasing even if the time is changed
+        // sequence should reset to 0 if the time is changed
         ctx.mock.timers.tick(1);
-        testSnowflakeId(g, g.generate(), 123456790, 12, 2);
+        testSnowflakeId(g, g.generate(), 123456790, 12, 0);
 
         ctx.mock.timers.tick(1000);
-        testSnowflakeId(g, g.generate(), 123457790, 12, 3);
-        testSnowflakeId(g, g.generate(), 123457790, 12, 4);
-        testSnowflakeId(g, g.generate(), 123457790, 12, 5);
+        testSnowflakeId(g, g.generate(), 123457790, 12, 0);
+        testSnowflakeId(g, g.generate(), 123457790, 12, 1);
+        testSnowflakeId(g, g.generate(), 123457790, 12, 2);
     });
 
-    NodeTest.it('error should be thrown if time goes back to the past', (ctx) => {
+    NodeTest.it('error should be thrown if time goes back to the past by default', (ctx) => {
 
         const epoch = Date.parse('2023-11-11 22:22:22');
 
         ctx.mock.timers.enable({ apis: ['Date'], now: epoch });
 
-        const g = new Snowflake.SnowflakeSiGenerator({
+        const g1 = new SnowflakeSI.SnowflakeSiGenerator({
             machineId: 12,
             epoch: epoch,
             machineIdBitWidth: 4,
+        });
+
+        const g2 = new SnowflakeSI.SnowflakeSiGenerator({
+            machineId: 12,
+            epoch: epoch,
+            machineIdBitWidth: 4,
+            onTimeReversed: Snowflake.ESnowflakeTimeReversedStrategy.THROW_ERROR,
         });
 
         ctx.mock.timers.setTime(epoch + 1000);
-        g.generate();
+        testSnowflakeId(g1, g1.generate(), 1000, 12, 0);
+        testSnowflakeId(g2, g2.generate(), 1000, 12, 0);
         ctx.mock.timers.setTime(epoch + 999);
 
-        NodeAssert.throws(() => { g.generate(); }, eL.E_TIME_REVERSED);
+        NodeAssert.throws(() => { g1.generate(); }, eL.E_TIME_REVERSED);
+        NodeAssert.throws(() => { g2.generate(); }, eL.E_TIME_REVERSED);
+    });
+
+    NodeTest.it('reversed time should be use when using USE_REVERSED_TIME strategy', (ctx) => {
+
+        const epoch = Date.parse('2023-11-11 22:22:22');
+
+        ctx.mock.timers.enable({ apis: ['Date'], now: epoch });
+
+        const g = new SnowflakeSI.SnowflakeSiGenerator({
+            machineId: 12,
+            epoch: epoch,
+            machineIdBitWidth: 4,
+            onTimeReversed: Snowflake.ESnowflakeTimeReversedStrategy.USE_REVERSED_TIME,
+        });
+
+        ctx.mock.timers.setTime(epoch + 1000);
+
+        testSnowflakeId(g, g.generate(), 1000, 12, 0);
+
+        ctx.mock.timers.setTime(epoch + 999);
+
+        testSnowflakeId(g, g.generate(), 999, 12, 0);
+    });
+
+    NodeTest.it('reversed time should be use when using USE_PREVIOUS_TIME strategy', (ctx) => {
+
+        const epoch = Date.parse('2023-11-11 22:22:22');
+
+        ctx.mock.timers.enable({ apis: ['Date'], now: epoch });
+
+        const g = new SnowflakeSI.SnowflakeSiGenerator({
+            machineId: 12,
+            epoch: epoch,
+            machineIdBitWidth: 4,
+            onTimeReversed: Snowflake.ESnowflakeTimeReversedStrategy.USE_PREVIOUS_TIME,
+        });
+
+        ctx.mock.timers.setTime(epoch + 1000);
+
+        testSnowflakeId(g, g.generate(), 1000, 12, 0);
+
+        ctx.mock.timers.setTime(epoch + 999);
+
+        testSnowflakeId(g, g.generate(), 1000, 12, 1);
     });
 
     NodeTest.it('error should be thrown if the sequence max out', (ctx) => {
@@ -200,7 +254,7 @@ NodeTest.describe('Snowflake SI', () => {
 
         ctx.mock.timers.enable({ apis: ['Date'], now: epoch });
 
-        const g = new Snowflake.SnowflakeSiGenerator({
+        const g = new SnowflakeSI.SnowflakeSiGenerator({
             machineId: 12,
             epoch: epoch,
             machineIdBitWidth: 4,
@@ -216,13 +270,166 @@ NodeTest.describe('Snowflake SI', () => {
         NodeAssert.throws(() => { g.generate(); }, eL.E_SEQUENCE_OVERFLOWED);
     });
 
+    NodeTest.it('sequence number should be reset to 0 on time changed by default', (ctx) => {
+
+        const epoch = Date.parse('2023-11-11 22:22:22');
+
+        ctx.mock.timers.enable({ apis: ['Date'], now: epoch });
+
+        const g1 = new SnowflakeSI.SnowflakeSiGenerator({
+            machineId: 12,
+            epoch: epoch,
+            machineIdBitWidth: 4,
+        });
+
+        const g2 = new SnowflakeSI.SnowflakeSiGenerator({
+            machineId: 12,
+            epoch: epoch,
+            machineIdBitWidth: 4,
+            onTimeChanged: Snowflake.ESnowflakeSequenceStrategy.RESET,
+        });
+
+        testSnowflakeId(g1, g1.generate(), 0, 12, 0);
+        testSnowflakeId(g2, g2.generate(), 0, 12, 0);
+        testSnowflakeId(g1, g1.generate(), 0, 12, 1);
+        testSnowflakeId(g2, g2.generate(), 0, 12, 1);
+
+        ctx.mock.timers.tick(1);
+
+        testSnowflakeId(g1, g1.generate(), 1, 12, 0);
+        testSnowflakeId(g2, g2.generate(), 1, 12, 0);
+        testSnowflakeId(g1, g1.generate(), 1, 12, 1);
+        testSnowflakeId(g2, g2.generate(), 1, 12, 1);
+        testSnowflakeId(g1, g1.generate(), 1, 12, 2);
+        testSnowflakeId(g2, g2.generate(), 1, 12, 2);
+
+        ctx.mock.timers.tick(1);
+
+        testSnowflakeId(g1, g1.generate(), 2, 12, 0);
+        testSnowflakeId(g2, g2.generate(), 2, 12, 0);
+    });
+
+    NodeTest.it('sequence number should be reset to 0 on time changed only when reach the threshold', (ctx) => {
+
+        const epoch = Date.parse('2023-11-11 22:22:22');
+
+        ctx.mock.timers.enable({ apis: ['Date'], now: epoch });
+
+        const g1 = new SnowflakeSI.SnowflakeSiGenerator({
+            machineId: 12,
+            epoch: epoch,
+            machineIdBitWidth: 4,
+            sequenceResetThreshold: 5,
+        });
+
+        testSnowflakeId(g1, g1.generate(), 0, 12, 0);
+        ctx.mock.timers.tick(1);
+        testSnowflakeId(g1, g1.generate(), 1, 12, 1);
+        ctx.mock.timers.tick(1);
+        testSnowflakeId(g1, g1.generate(), 2, 12, 2);
+        ctx.mock.timers.tick(1);
+        testSnowflakeId(g1, g1.generate(), 3, 12, 3);
+        ctx.mock.timers.tick(1);
+        testSnowflakeId(g1, g1.generate(), 4, 12, 4);
+        ctx.mock.timers.tick(1);
+
+        testSnowflakeId(g1, g1.generate(), 5, 12, 0);
+
+        testSnowflakeId(g1, g1.generate(), 5, 12, 1);
+        testSnowflakeId(g1, g1.generate(), 5, 12, 2);
+        testSnowflakeId(g1, g1.generate(), 5, 12, 3);
+        testSnowflakeId(g1, g1.generate(), 5, 12, 4);
+        testSnowflakeId(g1, g1.generate(), 5, 12, 5);
+        testSnowflakeId(g1, g1.generate(), 5, 12, 6);
+
+        ctx.mock.timers.tick(1);
+
+        testSnowflakeId(g1, g1.generate(), 6, 12, 0);
+
+        for (const threshold of [
+            true, false,
+            -1, g1.maximumSequence + 1, 1.1, 0.1, '1', '0.1',
+            [], {}, Symbol(''), NaN, Infinity, 123456789n,
+        ]) {
+
+            NodeAssert.throws(() => {
+                new SnowflakeSI.SnowflakeSiGenerator({
+                    machineId: 12,
+                    epoch: epoch,
+                    machineIdBitWidth: 4,
+                    sequenceResetThreshold: threshold as unknown as number,
+                });
+            });
+        }
+    });
+
+    NodeTest.it('sequence number should not reset if using strategy INCREMENT', (ctx) => {
+
+        const epoch = Date.parse('2023-11-11 22:22:22');
+
+        ctx.mock.timers.enable({ apis: ['Date'], now: epoch });
+
+        const g1 = new SnowflakeSI.SnowflakeSiGenerator({
+            machineId: 12,
+            epoch: epoch,
+            machineIdBitWidth: 4,
+            onTimeChanged: Snowflake.ESnowflakeSequenceStrategy.KEEP_CURRENT,
+        });
+
+        testSnowflakeId(g1, g1.generate(), 0, 12, 0);
+        testSnowflakeId(g1, g1.generate(), 0, 12, 1);
+
+        ctx.mock.timers.tick(1);
+
+        testSnowflakeId(g1, g1.generate(), 1, 12, 2);
+        testSnowflakeId(g1, g1.generate(), 1, 12, 3);
+
+        ctx.mock.timers.tick(1);
+
+        testSnowflakeId(g1, g1.generate(), 2, 12, 4);
+    });
+
+    NodeTest.it('sequence number should be able to be updated by custom logic', (ctx) => {
+
+        const epoch = Date.parse('2023-11-11 22:22:22');
+
+        ctx.mock.timers.enable({ apis: ['Date'], now: epoch });
+
+        const g = new SnowflakeSI.SnowflakeSiGenerator({
+            machineId: 12,
+            epoch: epoch,
+            machineIdBitWidth: 4,
+            onTimeChanged: (c) => c > 3 ? 2 : 10,
+        });
+
+        testSnowflakeId(g, g.generate(), 0, 12, 0);
+        testSnowflakeId(g, g.generate(), 0, 12, 1);
+        testSnowflakeId(g, g.generate(), 0, 12, 2);
+        testSnowflakeId(g, g.generate(), 0, 12, 3);
+        // now the next sequence number should be 4
+
+        ctx.mock.timers.tick(1);
+
+        // after 1 tick, the sequence number should be change to 2 because 4 > 3
+
+        testSnowflakeId(g, g.generate(), 1, 12, 2);
+
+        // now the next sequence number should be 3
+
+        ctx.mock.timers.tick(1);
+
+        // after 1 tick, the sequence number should be change to 10 because !(3 > 3)
+
+        testSnowflakeId(g, g.generate(), 2, 12, 10);
+    });
+
     NodeTest.it('error should be thrown if the sequence max out', (ctx) => {
 
         const epoch = Date.parse('2023-11-11 22:22:22');
 
         ctx.mock.timers.enable({ apis: ['Date'], now: epoch });
 
-        const g = new Snowflake.SnowflakeSiGenerator({
+        const g = new SnowflakeSI.SnowflakeSiGenerator({
             machineId: 12,
             epoch: epoch,
             machineIdBitWidth: 4,
@@ -235,11 +442,6 @@ NodeTest.describe('Snowflake SI', () => {
 
         NodeAssert.throws(() => { g.generate(); }, eL.E_SEQUENCE_OVERFLOWED);
         NodeAssert.throws(() => { g.generateBy(epoch + 1000, g.maximumSequence + 1); }, eL.E_SEQUENCE_OVERFLOWED);
-
-        // increasing the time should reset the counter of generated IDs in this millisecond
-        // so a new ID can be generated again
-        ctx.mock.timers.tick(1);
-        g.generate();
     });
 
     NodeTest.it('error should be thrown if current time is before the epoch', (ctx) => {
@@ -248,7 +450,7 @@ NodeTest.describe('Snowflake SI', () => {
 
         ctx.mock.timers.enable({ apis: ['Date'], now: epoch - 1000 });
 
-        const g = new Snowflake.SnowflakeSiGenerator({
+        const g = new SnowflakeSI.SnowflakeSiGenerator({
             machineId: 12,
             epoch: epoch,
             machineIdBitWidth: 4,
