@@ -1,5 +1,6 @@
 import * as NodeTest from 'node:test';
 import * as NodeAssert from 'node:assert';
+import * as TestKits from '@litert/utils-test';
 import * as Snowflake from './Snowflake';
 import * as eL from './Errors';
 
@@ -25,7 +26,7 @@ function testSnowflakeId(
     );
 }
 
-NodeTest.describe('Snowflake', () => {
+NodeTest.describe('Snowflake', async () => {
 
     NodeTest.it('for invalid machine ID, an error should be thrown', () => {
 
@@ -311,6 +312,56 @@ NodeTest.describe('Snowflake', () => {
         ctx.mock.timers.tick(1);
 
         testSnowflakeId(g1.generate(), 2, 12, 4);
+    });
+
+    await NodeTest.it('should return exact quantity of UUID by bulkGenerate', async (ctx) => {
+
+        const epoch = Date.parse('2023-11-11 22:22:22');
+
+        ctx.mock.timers.enable({ apis: ['Date', 'setTimeout'], now: epoch });
+
+        const g = new Snowflake.SnowflakeGenerator({
+            machineId: 12,
+            epoch: epoch,
+        });
+
+        NodeAssert.strictEqual((await TestKits.autoTick(ctx, g.bulkGenerate(512))).length, 512);
+
+        NodeAssert.strictEqual((await TestKits.autoTick(ctx, g.bulkGenerate(4096))).length, 4096);
+
+        NodeAssert.strictEqual((await TestKits.autoTick(ctx, g.bulkGenerate(10000))).length, 10000);
+
+        const g2 = new Snowflake.SnowflakeGenerator({
+            machineId: 12,
+            epoch: epoch,
+        });
+
+        ctx.mock.timers.setTime(epoch + 1000);
+
+        g.generate();
+
+        ctx.mock.timers.setTime(epoch + 10);
+
+        try {
+            await TestKits.autoTick(ctx, g.bulkGenerate(10000));
+            NodeAssert.fail('should not reach here');
+        }
+        catch (e) {
+            NodeAssert.ok(e instanceof eL.E_TIME_REVERSED);
+        }
+
+
+        ctx.mock.timers.setTime(0);
+
+        try {
+
+            await g2.bulkGenerate(1);
+            NodeAssert.fail('should not reach here');
+        }
+        catch (e) {
+
+            NodeAssert.ok(e instanceof eL.E_TIME_BEFORE_EPOCH);
+        }
     });
 
     NodeTest.it('sequence number should be able to be updated by custom logic', (ctx) => {

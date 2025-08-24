@@ -2,7 +2,7 @@
 
 # Class: SnowflakeGenerator
 
-Defined in: [Snowflake.ts:134](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L134)
+Defined in: [Snowflake.ts:162](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L162)
 
 The class for generating Snowflake IDs.
 
@@ -12,7 +12,7 @@ The class for generating Snowflake IDs.
 
 > **new SnowflakeGenerator**(`opts`): `SnowflakeGenerator`
 
-Defined in: [Snowflake.ts:186](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L186)
+Defined in: [Snowflake.ts:214](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L214)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [Snowflake.ts:186](https://github.com/litert/uuid.js/blob/master/src
 
 > `readonly` **epoch**: `number`
 
-Defined in: [Snowflake.ts:176](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L176)
+Defined in: [Snowflake.ts:204](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L204)
 
 The epoch of the generator.
 
@@ -48,7 +48,7 @@ The value is recommended to be the time when the service/application goes online
 
 > `readonly` **machineId**: `number`
 
-Defined in: [Snowflake.ts:167](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L167)
+Defined in: [Snowflake.ts:195](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L195)
 
 The identifier of the machine that generates the UUID.
 
@@ -65,7 +65,7 @@ so that the generated IDs will not conflict with each other.
 
 > `readonly` `static` **MAX\_MACHINE\_ID**: `1023` = `1023`
 
-Defined in: [Snowflake.ts:157](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L157)
+Defined in: [Snowflake.ts:185](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L185)
 
 The maximum machine ID that can be used by the generator.
 
@@ -75,17 +75,50 @@ The maximum machine ID that can be used by the generator.
 
 > `readonly` `static` **MIN\_MACHINE\_ID**: `0` = `0`
 
-Defined in: [Snowflake.ts:151](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L151)
+Defined in: [Snowflake.ts:179](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L179)
 
 The minimum machine ID that can be used by the generator.
 
 ## Methods
 
+### bulkGenerate()
+
+> **bulkGenerate**(`qty`, `opts`): `Promise`\<`bigint`[]\>
+
+Defined in: [Snowflake.ts:286](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L286)
+
+Generate a bulk of Snowflake IDs.
+
+This method helps generate batch of Snowflake IDs, handling the time
+reversed and sequence overflow scenarios automatically.
+
+#### Parameters
+
+##### qty
+
+`number`
+
+The quantity of IDs to generate.
+
+##### opts
+
+[`IBulkGenerationOptions`](../interfaces/IBulkGenerationOptions.md) = `DEFAULT_BULK_OPTIONS`
+
+The options for bulk generation.
+
+#### Returns
+
+`Promise`\<`bigint`[]\>
+
+A promise that resolves to an array of Snowflake IDs.
+
+***
+
 ### generate()
 
 > **generate**(): `bigint`
 
-Defined in: [Snowflake.ts:256](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L256)
+Defined in: [Snowflake.ts:334](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L334)
 
 Generate the next Snowflake ID, based on the current time and the next sequence number.
 
@@ -113,7 +146,7 @@ If the current time is before the epoch.
 
 > **generateBy**(`timestamp`, `sequence`): `bigint`
 
-Defined in: [Snowflake.ts:323](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L323)
+Defined in: [Snowflake.ts:401](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L401)
 
 Generate a Snowflake ID by specifying the timestamp and sequence number.
 

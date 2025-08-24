@@ -4,7 +4,7 @@
 
 > `const` **SNOWFLAKE\_DEFAULT\_TIME\_CHANGED\_STRATEGY**: [`RESET`](../enumerations/ESnowflakeSequenceStrategy.md#reset) = `ESnowflakeSequenceStrategy.RESET`
 
-Defined in: [Snowflake.ts:124](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L124)
+Defined in: [Snowflake.ts:152](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L152)
 
 The default strategy for the time changed event,
 which reset the sequence number to 0.

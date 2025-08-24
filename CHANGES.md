@@ -1,5 +1,9 @@
 # Changes Logs
 
+## v2.1.0
+
+- feat(algo): added `bulkGenerate` for both Snowflake and Snowflake-SI algorithms.
+
 ## v2.0.3
 
 - fix(algo): reverted the update of `v2.0.2` that removed the reset of sequence number to 0.

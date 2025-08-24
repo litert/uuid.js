@@ -2,7 +2,7 @@
 
 # Enumeration: ESnowflakeTimeReversedStrategy
 
-Defined in: [Snowflake.ts:21](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L21)
+Defined in: [Snowflake.ts:49](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L49)
 
 The strategy for handling time reversal events in Snowflake ID generation.
 
@@ -12,7 +12,7 @@ The strategy for handling time reversal events in Snowflake ID generation.
 
 > **THROW\_ERROR**: `0`
 
-Defined in: [Snowflake.ts:30](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L30)
+Defined in: [Snowflake.ts:58](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L58)
 
 Throw an error to stop the generator from generating IDs.
 
@@ -26,7 +26,7 @@ Throw an error to stop the generator from generating IDs.
 
 > **USE\_PREVIOUS\_TIME**: `2`
 
-Defined in: [Snowflake.ts:49](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L49)
+Defined in: [Snowflake.ts:77](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L77)
 
 Use the previous time as the current time to generate IDs.
 
@@ -41,7 +41,7 @@ Use the previous time as the current time to generate IDs.
 
 > **USE\_REVERSED\_TIME**: `1`
 
-Defined in: [Snowflake.ts:39](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L39)
+Defined in: [Snowflake.ts:67](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L67)
 
 Use the reversed time as the current time to generate IDs.
 

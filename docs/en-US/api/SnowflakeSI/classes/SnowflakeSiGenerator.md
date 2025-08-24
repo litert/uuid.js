@@ -2,7 +2,7 @@
 
 # Class: SnowflakeSiGenerator
 
-Defined in: [SnowflakeSI.ts:75](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L75)
+Defined in: [SnowflakeSI.ts:81](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L81)
 
 The class for generating Snowflake (Safe-Integer) IDs.
 
@@ -12,7 +12,7 @@ The class for generating Snowflake (Safe-Integer) IDs.
 
 > **new SnowflakeSiGenerator**(`opts`): `SnowflakeSiGenerator`
 
-Defined in: [SnowflakeSI.ts:153](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L153)
+Defined in: [SnowflakeSI.ts:159](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L159)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [SnowflakeSI.ts:153](https://github.com/litert/uuid.js/blob/master/s
 
 > `readonly` **clockBitWidth**: `number`
 
-Defined in: [SnowflakeSI.ts:136](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L136)
+Defined in: [SnowflakeSI.ts:142](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L142)
 
 The bit width of the clock part.
 
@@ -50,7 +50,7 @@ keep the clock part within 40 bits (before `2038-01-19T03:14:07Z`).
 
 > `readonly` **epoch**: `number`
 
-Defined in: [SnowflakeSI.ts:107](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L107)
+Defined in: [SnowflakeSI.ts:113](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L113)
 
 The epoch of the generator.
 
@@ -60,7 +60,7 @@ The epoch of the generator.
 
 > `readonly` **machineId**: `number`
 
-Defined in: [SnowflakeSI.ts:102](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L102)
+Defined in: [SnowflakeSI.ts:108](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L108)
 
 The identifier of the machine that generates the UUID.
 
@@ -81,7 +81,7 @@ The range of the machine ID depends on the `machineIdBitWidth`:
 
 > `readonly` **machineIdBitWidth**: `number`
 
-Defined in: [SnowflakeSI.ts:116](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L116)
+Defined in: [SnowflakeSI.ts:122](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L122)
 
 The bit width of the machine ID, must be an integer between 1 and 8.
 
@@ -99,7 +99,7 @@ The sum of `machineIdBitWidth` and `sequenceBitWidth` must be 12.
 
 > `readonly` **maximumSequence**: `number`
 
-Defined in: [SnowflakeSI.ts:143](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L143)
+Defined in: [SnowflakeSI.ts:149](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L149)
 
 The maximum sequence of the generator, per millisecond.
 
@@ -109,7 +109,7 @@ The maximum sequence of the generator, per millisecond.
 
 > `readonly` **sequenceBitWidth**: `number`
 
-Defined in: [SnowflakeSI.ts:125](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L125)
+Defined in: [SnowflakeSI.ts:131](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L131)
 
 The bit width of the sequence number, must be an integer between 8 and 11.
 
@@ -123,11 +123,44 @@ The sum of `machineIdBitWidth` and `sequenceBitWidth` must be 12.
 
 ## Methods
 
+### bulkGenerate()
+
+> **bulkGenerate**(`qty`, `opts`): `Promise`\<`number`[]\>
+
+Defined in: [SnowflakeSI.ts:273](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L273)
+
+Generate a bulk of Snowflake IDs.
+
+This method helps generate batch of Snowflake IDs, handling the time
+reversed and sequence overflow scenarios automatically.
+
+#### Parameters
+
+##### qty
+
+`number`
+
+The quantity of IDs to generate.
+
+##### opts
+
+[`IBulkGenerationOptions`](../../Snowflake/interfaces/IBulkGenerationOptions.md) = `DEFAULT_BULK_OPTIONS`
+
+The options for bulk generation.
+
+#### Returns
+
+`Promise`\<`number`[]\>
+
+A promise that resolves to an array of Snowflake IDs.
+
+***
+
 ### generate()
 
 > **generate**(): `number`
 
-Defined in: [SnowflakeSI.ts:265](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L265)
+Defined in: [SnowflakeSI.ts:321](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L321)
 
 Generate the next SnowflakeSI ID, based on the current time and the next sequence number.
 
@@ -155,7 +188,7 @@ If the current time is earlier than the epoch.
 
 > **generateBy**(`timestamp`, `sequence`): `number`
 
-Defined in: [SnowflakeSI.ts:332](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L332)
+Defined in: [SnowflakeSI.ts:388](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L388)
 
 Generate a SnowflakeSI ID by specifying the timestamp and sequence number.
 

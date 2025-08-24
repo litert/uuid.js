@@ -2,7 +2,7 @@
 
 # Interface: ISnowflakeSiOptions
 
-Defined in: [SnowflakeSI.ts:19](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L19)
+Defined in: [SnowflakeSI.ts:25](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L25)
 
 ## Extends
 
@@ -14,7 +14,7 @@ Defined in: [SnowflakeSI.ts:19](https://github.com/litert/uuid.js/blob/master/sr
 
 > `readonly` `optional` **clockBitWidth**: `number`
 
-Defined in: [SnowflakeSI.ts:136](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L136)
+Defined in: [SnowflakeSI.ts:142](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L142)
 
 The bit width of the clock part.
 
@@ -38,7 +38,7 @@ keep the clock part within 40 bits (before `2038-01-19T03:14:07Z`).
 
 > `readonly` **epoch**: `number`
 
-Defined in: [SnowflakeSI.ts:107](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L107)
+Defined in: [SnowflakeSI.ts:113](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L113)
 
 The epoch of the generator.
 
@@ -52,7 +52,7 @@ The epoch of the generator.
 
 > `readonly` **machineId**: `number`
 
-Defined in: [SnowflakeSI.ts:102](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L102)
+Defined in: [SnowflakeSI.ts:108](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L108)
 
 The identifier of the machine that generates the UUID.
 
@@ -77,7 +77,7 @@ The range of the machine ID depends on the `machineIdBitWidth`:
 
 > `readonly` `optional` **machineIdBitWidth**: `number`
 
-Defined in: [SnowflakeSI.ts:116](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L116)
+Defined in: [SnowflakeSI.ts:122](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L122)
 
 The bit width of the machine ID, must be an integer between 1 and 8.
 
@@ -99,7 +99,7 @@ The sum of `machineIdBitWidth` and `sequenceBitWidth` must be 12.
 
 > `optional` **onTimeChanged**: [`ESnowflakeSequenceStrategy`](../../Snowflake/enumerations/ESnowflakeSequenceStrategy.md) \| [`ISnowflakeUpdateSequenceOnTimeChanged`](../../Snowflake/type-aliases/ISnowflakeUpdateSequenceOnTimeChanged.md)\<`number`\>
 
-Defined in: [SnowflakeSI.ts:38](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L38)
+Defined in: [SnowflakeSI.ts:44](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L44)
 
 The strategy for handling the sequence number when the time changes.
 
@@ -118,7 +118,7 @@ Sf.ESnowflakeSequenceStrategy.RESET
 
 > `optional` **onTimeReversed**: [`ESnowflakeTimeReversedStrategy`](../../Snowflake/enumerations/ESnowflakeTimeReversedStrategy.md)
 
-Defined in: [SnowflakeSI.ts:28](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L28)
+Defined in: [SnowflakeSI.ts:34](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L34)
 
 The strategy for handling time reversal events.
 
@@ -134,7 +134,7 @@ ESnowflakeTimeReversedStrategy.THROW_ERROR
 
 > `readonly` `optional` **sequenceBitWidth**: `number`
 
-Defined in: [SnowflakeSI.ts:125](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L125)
+Defined in: [SnowflakeSI.ts:131](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L131)
 
 The bit width of the sequence number, must be an integer between 8 and 11.
 
@@ -156,7 +156,7 @@ The sum of `machineIdBitWidth` and `sequenceBitWidth` must be 12.
 
 > `optional` **sequenceResetThreshold**: `number`
 
-Defined in: [SnowflakeSI.ts:48](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L48)
+Defined in: [SnowflakeSI.ts:54](https://github.com/litert/uuid.js/blob/master/src/lib/SnowflakeSI.ts#L54)
 
 When the sequence strategy is set to `ESnowflakeSequenceStrategy.RESET`,
 this option specifies the threshold for resetting the sequence number.

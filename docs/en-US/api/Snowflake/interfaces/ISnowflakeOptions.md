@@ -2,7 +2,7 @@
 
 # Interface: ISnowflakeOptions
 
-Defined in: [Snowflake.ts:83](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L83)
+Defined in: [Snowflake.ts:111](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L111)
 
 The options for the standard Snowflake ID generator.
 
@@ -16,7 +16,7 @@ The options for the standard Snowflake ID generator.
 
 > `readonly` `optional` **epoch**: `number`
 
-Defined in: [Snowflake.ts:176](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L176)
+Defined in: [Snowflake.ts:204](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L204)
 
 The epoch of the generator.
 
@@ -38,7 +38,7 @@ The value is recommended to be the time when the service/application goes online
 
 > `readonly` **machineId**: `number`
 
-Defined in: [Snowflake.ts:167](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L167)
+Defined in: [Snowflake.ts:195](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L195)
 
 The identifier of the machine that generates the UUID.
 
@@ -59,7 +59,7 @@ so that the generated IDs will not conflict with each other.
 
 > `optional` **onTimeChanged**: [`ESnowflakeSequenceStrategy`](../enumerations/ESnowflakeSequenceStrategy.md) \| [`ISnowflakeUpdateSequenceOnTimeChanged`](../type-aliases/ISnowflakeUpdateSequenceOnTimeChanged.md)\<`bigint`\>
 
-Defined in: [Snowflake.ts:101](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L101)
+Defined in: [Snowflake.ts:129](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L129)
 
 The strategy for handling the sequence number when the time changes.
 
@@ -78,7 +78,7 @@ ESnowflakeSequenceStrategy.RESET
 
 > `optional` **onTimeReversed**: [`ESnowflakeTimeReversedStrategy`](../enumerations/ESnowflakeTimeReversedStrategy.md)
 
-Defined in: [Snowflake.ts:91](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L91)
+Defined in: [Snowflake.ts:119](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L119)
 
 The strategy for handling time reversal events.
 
@@ -94,7 +94,7 @@ ESnowflakeTimeReversedStrategy.THROW_ERROR
 
 > `optional` **sequenceResetThreshold**: `number`
 
-Defined in: [Snowflake.ts:111](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L111)
+Defined in: [Snowflake.ts:139](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L139)
 
 When the sequence strategy is set to `ESnowflakeSequenceStrategy.RESET`,
 this option specifies the threshold for resetting the sequence number.

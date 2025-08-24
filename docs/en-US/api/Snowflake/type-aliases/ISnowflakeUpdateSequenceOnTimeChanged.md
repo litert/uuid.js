@@ -4,7 +4,7 @@
 
 > **ISnowflakeUpdateSequenceOnTimeChanged**\<`T`\> = (`current`) => `T`
 
-Defined in: [Snowflake.ts:78](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L78)
+Defined in: [Snowflake.ts:106](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L106)
 
 The strategy for handling time changes in Snowflake ID generation.
 

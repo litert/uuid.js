@@ -13,6 +13,7 @@
 
 ## Interfaces
 
+- [IBulkGenerationOptions](interfaces/IBulkGenerationOptions.md)
 - [ISnowflakeOptions](interfaces/ISnowflakeOptions.md)
 
 ## Type Aliases

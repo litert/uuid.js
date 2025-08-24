@@ -2,7 +2,7 @@
 
 # Enumeration: ESnowflakeSequenceStrategy
 
-Defined in: [Snowflake.ts:55](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L55)
+Defined in: [Snowflake.ts:83](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L83)
 
 How should the generator handle the sequence number when the time changes.
 
@@ -12,7 +12,7 @@ How should the generator handle the sequence number when the time changes.
 
 > **KEEP\_CURRENT**: `1`
 
-Defined in: [Snowflake.ts:72](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L72)
+Defined in: [Snowflake.ts:100](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L100)
 
 Keep the sequence number unchanged when the time changes.
 
@@ -26,7 +26,7 @@ Keep the sequence number unchanged when the time changes.
 
 > **RESET**: `0`
 
-Defined in: [Snowflake.ts:63](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L63)
+Defined in: [Snowflake.ts:91](https://github.com/litert/uuid.js/blob/master/src/lib/Snowflake.ts#L91)
 
 Reset the sequence number to 0 when the time changes.
 

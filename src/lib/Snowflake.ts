@@ -14,6 +14,34 @@
  *  limitations under the License.
  */
 import * as eL from './Errors';
+import * as NodeTimers from 'node:timers/promises';
+
+/**
+ * The options for bulk generation of snowflake IDs.
+ */
+export interface IBulkGenerationOptions {
+
+    /**
+     * The maximum number of sequential retries for generating IDs in bulk.
+     *
+     * If the failures exceeded this limit, the original error will be thrown.
+     *
+     * @default 3
+     */
+    maxRetries?: number;
+
+    /**
+     * The delay between each retry attempt in milliseconds.
+     *
+     * @default 1
+     */
+    retryDelayMs?: number;
+}
+
+const DEFAULT_BULK_OPTIONS: Required<IBulkGenerationOptions> = {
+    'maxRetries': 3,
+    'retryDelayMs': 1,
+};
 
 /**
  * The strategy for handling time reversal events in Snowflake ID generation.
@@ -242,6 +270,56 @@ export class SnowflakeGenerator {
                 this._onTimeChangedCallback = opts.onTimeChanged as ISnowflakeUpdateSequenceOnTimeChanged<bigint>;
                 break;
         }
+    }
+
+    /**
+     * Generate a bulk of Snowflake IDs.
+     *
+     * This method helps generate batch of Snowflake IDs, handling the time
+     * reversed and sequence overflow scenarios automatically.
+     *
+     * @param qty The quantity of IDs to generate.
+     * @param opts The options for bulk generation.
+     *
+     * @returns A promise that resolves to an array of Snowflake IDs.
+     */
+    public async bulkGenerate(
+        qty: number,
+        opts: IBulkGenerationOptions = DEFAULT_BULK_OPTIONS,
+    ): Promise<bigint[]> {
+
+        opts.maxRetries ??= DEFAULT_BULK_OPTIONS.maxRetries;
+        opts.retryDelayMs ??= DEFAULT_BULK_OPTIONS.retryDelayMs;
+
+        const ret: bigint[] = new Array(qty);
+
+        for (let i = 0, fails = 0; i < qty; i++) {
+
+            try {
+
+                ret[i] = this.generate();
+                fails = 0;
+            }
+            catch (e) {
+
+                if (fails++ === opts.maxRetries) {
+
+                    throw e;
+                }
+
+                switch (true) {
+                    case e instanceof eL.E_SEQUENCE_OVERFLOWED:
+                    case e instanceof eL.E_TIME_REVERSED:
+                        await NodeTimers.setTimeout(opts.retryDelayMs);
+                        i--;
+                        break;
+                    default:
+                        throw e;
+                }
+            }
+        }
+
+        return ret;
     }
 
     /**
