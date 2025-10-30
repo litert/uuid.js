@@ -6,6 +6,9 @@ export default defineConfig({
   title: "@litert/uuid",
   description: "A uuid generator library for NodeJS.",
   base: '/projects/uuid.js/',
+  sitemap: {
+    hostname: 'https://litert.org/projects/uuid.js/'
+  },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
